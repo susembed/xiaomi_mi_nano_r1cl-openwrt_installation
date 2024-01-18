@@ -36,7 +36,9 @@ scp ./openwrt-23.05.0-ramips-mt76x8-xiaomi_miwifi-nano-squashfs-sysupgrade.bin r
 ```
 
 Method b: start tenetd with command injection
+
 /// Credit: https://openwrt.org/toh/xiaomi/miwifi_mini#quick_openwrt_installation
+
 b1. On address bar of browser after login to dashboard, replace part behide 
 ``` stok=<long_hex_value>``` with 
 
@@ -76,10 +78,13 @@ nc -l  -p 1000 > ./openwrt.bin
 ```bash
 nc -w 3 192.168.31.1 1000 < ./openwrt-23.05.0-ramips-mt76x8-xiaomi_miwifi-nano-squashfs-sysupgrade.bin
 ```
-4 Check md5sum to makesure no corruption on openwrt.bin, similar to step ```a3.3```.
-5. Flash: 
+
+#### 4. Check md5sum to makesure no corruption on openwrt.bin, similar to step ```a3.3```.
+
+#### 5. Flash: 
 ```bash
 mtd -r write /tmp/openwrt.bin firmware
 ```
 , device will reboot when flash finish.
-6. Check result at 192.168.1.1.
+
+#### 6. Check result at 192.168.1.1.
