@@ -1,4 +1,5 @@
 ### More detail intruction to install OpenWrt on Xiaomi Mi WiFi Nano / Youth (R1CL) router
+This is based on my experience, original intruction from: https://openwrt.org/toh/xiaomi/miwifi_nano#installation_via_ssh
 #### 1. Login, manual update firmware to development ver (miwifi_r1cl_all_59371_2.1.26.bin file)
 #### 2. Login or setup admin password, copy value stok=<very_long_hex_string> on address bar of browser.
 #### 3. Exploit, backup original firmware and upload OpenWrt binary file: Try method a first.
@@ -35,14 +36,22 @@ scp ./openwrt-23.05.0-ramips-mt76x8-xiaomi_miwifi-nano-squashfs-sysupgrade.bin r
 ```
 
 Method b: start tenetd with command injection
+/// Credit: https://openwrt.org/toh/xiaomi/miwifi_mini#quick_openwrt_installation
 b1. On address bar of browser after login to dashboard, replace part behide 
-``` stok=<long_hex_value>``` 
-with 
+``` stok=<long_hex_value>``` with 
 
-```/api/xqnetwork/set_wifi_ap?ssid=whatever&encryption=NONE&enctype=NONE&channel=1%3B%2Fusr%2Fsbin%2Ftelnetd```
+```
+/api/xqnetwork/set_wifi_ap?ssid=whatever&encryption=NONE&enctype=NONE&channel=1%3B%2Fusr%2Fsbin%2Ftelnetd
+```
 b2. telnet to devices user=root, pwd=<admin_dashboard_pwd>
+
 b3. Back up stock firmware:
-- b3.1. Dump flash: dd if=/dev/mtdblock0 of=/tmp/all.bin
+
+- b3.1. Dump flash: 
+```bash
+dd if=/dev/mtdblock0 of=/tmp/all.bin
+```
+
 - b3.2. Start nc server on a linux client:
 ```bash
 nc -l  -p 10000 > ./all.bin
@@ -59,8 +68,14 @@ with 192.168.31.x is IP addr of your computer.
 rm /tmp/all.bin
 ```
 b4. Send openwrt firmware to device, similar to step b3.2 and b3.3 :
-- b4.1. Start nc server on device: nc -l  -p 1000 > ./openwrt.bin
-- b3.3. Send file to device: nc -w 3 192.168.31.1 < ./openwrt-23.05.0-ramips-mt76x8-xiaomi_miwifi-nano-squashfs-sysupgrade.bin
+- b4.1. Start nc server on router: 
+```bash
+nc -l  -p 1000 > ./openwrt.bin
+```
+- b3.3. Send file to router: 
+```bash
+nc -w 3 192.168.31.1 1000 < ./openwrt-23.05.0-ramips-mt76x8-xiaomi_miwifi-nano-squashfs-sysupgrade.bin
+```
 4 Check md5sum to makesure no corruption on openwrt.bin, similar to step ```a3.3```.
 5. Flash: 
 ```bash
